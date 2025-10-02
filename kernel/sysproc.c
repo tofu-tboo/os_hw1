@@ -91,3 +91,15 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64 sys_sigalarm(int ticks, void (*handler)())
+{
+	printf("sigalarm!\n");
+	return 0;
+}
+
+uint64 sys_sigreturn()
+{
+	return 0;
+}
+

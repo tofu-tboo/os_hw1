@@ -124,7 +124,7 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
-
+	
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
     freeproc(p);
@@ -146,7 +146,12 @@ found:
   p->context.ra = (uint64)forkret;
   p->context.sp = p->kstack + PGSIZE;
 
-  return p;
+  // Set up custom members.
+	p->intv_ticks = 0;
+	p->passed_ticks = 0;
+	p->intv_hndlr = 0;
+
+	return p;
 }
 
 // free a proc structure and the data hanging from it,

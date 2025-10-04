@@ -150,7 +150,8 @@ found:
 	p->intv_ticks = 0;
 	p->passed_ticks = 0;
 	p->intv_hndlr = 0;
-
+	p->cycled = 1;
+	
 	return p;
 }
 

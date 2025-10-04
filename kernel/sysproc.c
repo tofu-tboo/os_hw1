@@ -92,14 +92,29 @@ sys_uptime(void)
   return xticks;
 }
 
-uint64 sys_sigalarm(int ticks, void (*handler)())
+uint64 sys_sigalarm()
 {
-	printf("sigalarm!\n");
+	struct proc* p = myproc();
+	int intv_ticks;
+	uint64 intv_hndlr;
+	
+	argint(0, &intv_ticks);
+	argaddr(1, &intv_hndlr);
+	if (intv_ticks < 0)	return -1; // failed by invalid ticks param.
+		
+	p->intv_ticks = intv_ticks;
+	p->intv_hndlr = intv_hndlr;	
+	
 	return 0;
 }
 
 uint64 sys_sigreturn()
 {
-	return 0;
-}
+	struct proc* p = myproc();
+		
+	*(p->trapframe) = p->backup;	
+	p->cycled = 1;	
 
+	return p->trapframe->a0;
+}
+	

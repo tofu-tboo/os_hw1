@@ -79,7 +79,16 @@ usertrap(void)
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2)
  	{
-		printf("check p: a0=%ld\n", p->trapframe->a0);
+		if (p->intv_ticks > 0 && p->cycled)
+		{
+			p->passed_ticks = (p->passed_ticks + 1) % p->intv_ticks;
+			if (!p->passed_ticks) // timing of running handler
+			{
+				p->backup = *p->trapframe;
+				p->trapframe->epc = p->intv_hndlr;
+				p->cycled = 0;
+			}
+		}
   	yield();
 	}
 

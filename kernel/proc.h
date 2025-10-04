@@ -109,5 +109,7 @@ struct proc {
 	int intv_ticks;
 	int passed_ticks;
 	uint64 intv_hndlr;
+	struct trapframe backup;
+	char cycled; // bool
 };
 
